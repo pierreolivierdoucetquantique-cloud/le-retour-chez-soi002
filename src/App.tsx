@@ -16,6 +16,11 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import DashboardInvoices from "./pages/dashboard/DashboardInvoices";
+import DashboardDownloads from "./pages/dashboard/DashboardDownloads";
+import DashboardMessages from "./pages/dashboard/DashboardMessages";
+import DashboardNotifications from "./pages/dashboard/DashboardNotifications";
+import DashboardProfile from "./pages/dashboard/DashboardProfile";
 import Admin from "./pages/Admin";
 import AdminServices from "./pages/admin/AdminServices";
 import AdminBlog from "./pages/admin/AdminBlog";
@@ -54,6 +59,46 @@ function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tableau-de-bord/factures"
+            element={
+              <ProtectedRoute>
+                <DashboardInvoices />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tableau-de-bord/telechargements"
+            element={
+              <ProtectedRoute>
+                <DashboardDownloads />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tableau-de-bord/messages"
+            element={
+              <ProtectedRoute>
+                <DashboardMessages />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tableau-de-bord/notifications"
+            element={
+              <ProtectedRoute>
+                <DashboardNotifications />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tableau-de-bord/profil"
+            element={
+              <ProtectedRoute>
+                <DashboardProfile />
               </ProtectedRoute>
             }
           />

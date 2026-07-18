@@ -36,6 +36,24 @@ export const api = {
   delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
 };
 
+/** Télécharge un fichier binaire (ex. un PDF) depuis l'API et déclenche le téléchargement dans le navigateur. */
+export async function downloadFile(path: string, filename: string): Promise<void> {
+  const res = await fetch(`${API_URL}${path}`, { credentials: "include" });
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    throw new ApiError(res.status, data?.error ?? "Impossible de télécharger ce fichier.");
+  }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}
+
 export interface PublicUser {
   id: string;
   email: string;

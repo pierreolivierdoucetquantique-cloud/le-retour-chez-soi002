@@ -62,3 +62,29 @@ export interface ApiAppointment {
   notes: string | null;
   isPaid?: boolean;
 }
+
+export interface ApiInvoice {
+  id: string;
+  number: string;
+  userId: string;
+  appointmentId: string | null;
+  orderId: string | null;
+  subtotalCents: number;
+  gstCents: number;
+  qstCents: number;
+  totalCents: number;
+  paymentMethod: "stripe" | "interac";
+  status: "pending" | "paid" | "refunded" | "partial";
+  description: string;
+  createdAt: string;
+}
+
+export interface ApiContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+}

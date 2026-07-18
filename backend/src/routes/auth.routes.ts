@@ -7,7 +7,7 @@ import { hashPassword, verifyPassword } from "../utils/password";
 import { signAuthToken } from "../utils/jwt";
 import { newId } from "../utils/id";
 import { Errors } from "../utils/AppError";
-import { registerSchema, loginSchema } from "../validators/auth.validators";
+import { registerSchema, loginSchema, updateProfileSchema } from "../validators/auth.validators";
 import { requireAuth } from "../middleware/auth";
 import { sendWelcomeEmail } from "../services/email.service";
 
@@ -96,5 +96,43 @@ authRouter.get(
 
     if (!user) throw Errors.notFound("Utilisateur introuvable.");
     res.json({ user: toPublicUser(user) });
+  })
+);
+
+authRouter.patch(
+  "/me",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const data = updateProfileSchema.parse(req.body);
+
+    const [existing] = await db.select().from(users).where(eq(users.id, req.user!.sub));
+    if (!existing) throw Errors.notFound("Utilisateur introuvable.");
+
+    if (data.email !== existing.email) {
+      const [emailTaken] = await db.select().from(users).where(eq(users.email, data.email));
+      if (emailTaken) throw Errors.conflict("Ce courriel est déjà utilisé par un autre compte.");
+    }
+
+    let passwordHash = existing.passwordHash;
+    if (data.newPassword) {
+      if (!data.currentPassword || !(await verifyPassword(data.currentPassword, existing.passwordHash))) {
+        throw Errors.badRequest("Le mot de passe actuel est incorrect.");
+      }
+      passwordHash = await hashPassword(data.newPassword);
+    }
+
+    const [updated] = await db
+      .update(users)
+      .set({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        passwordHash,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, req.user!.sub))
+      .returning();
+
+    res.json({ user: toPublicUser(updated) });
   })
 );

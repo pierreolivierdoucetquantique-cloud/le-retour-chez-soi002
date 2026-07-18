@@ -26,7 +26,7 @@ export default function Register() {
     setIsSubmitting(true);
     try {
       await register(form);
-      navigate("/tableau-de-bord");
+      navigate("/tableau-de-bord/profil");
     } catch (err) {
       setError(
         err instanceof ApiError ? err.message : "Impossible de créer le compte pour le moment."

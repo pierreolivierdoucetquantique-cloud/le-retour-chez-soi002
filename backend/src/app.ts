@@ -13,6 +13,8 @@ import { testimonialsRouter } from "./routes/testimonials.routes";
 import { productsRouter } from "./routes/products.routes";
 import { ordersRouter } from "./routes/orders.routes";
 import { usersRouter } from "./routes/users.routes";
+import { invoicesRouter } from "./routes/invoices.routes";
+import { messagesRouter } from "./routes/messages.routes";
 import { miscRouter } from "./routes/misc.routes";
 import { webhooksRouter } from "./routes/webhooks.routes";
 import { adminRouter } from "./routes/admin.routes";
@@ -69,6 +71,8 @@ export function createApp() {
   app.use("/api/products", productsRouter);
   app.use("/api/orders", ordersRouter);
   app.use("/api/users", usersRouter);
+  app.use("/api/invoices", invoicesRouter);
+  app.use("/api/messages", messagesRouter);
   app.use("/api/admin", adminRouter);
   app.use("/api/calendar", calendarRouter);
   app.use("/api", miscRouter);
